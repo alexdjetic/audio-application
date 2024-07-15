@@ -11,10 +11,4 @@ class SoundLevel:
 
 
 if __name__ == "__main__":
-    sound_level = SoundLevel("example_app")
-    cmd = "ls -l"
-    stdout, stderr, return_code = execute(cmd)
-    print(sound_level)
-    print(f"STDOUT: {stdout}")
-    print(f"STDERR: {stderr}")
-    print(f"Return Code: {return_code}")
+    sound_level = SoundLevel("firefox")

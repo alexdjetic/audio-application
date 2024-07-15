@@ -17,7 +17,7 @@ def execute(cmd: str) -> tuple:
 
 
 if __name__ == "__main__":
-    cmd = "ls -l"
+    cmd = "ls -la"
     stdout, stderr, return_code = execute(cmd)
     print(f"STDOUT: {stdout}")
     print(f"STDERR: {stderr}")

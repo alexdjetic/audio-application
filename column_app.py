@@ -1,4 +1,6 @@
 import flet as ft
+from sound_level import SoundLevel
+
 
 class ColumnApp(ft.Container):
     """
@@ -11,7 +13,7 @@ class ColumnApp(ft.Container):
         page_height (int, optional): The initial height of the page. Defaults to 800.
     """
 
-    def __init__(self, app: str, volume: int = 0, page_width: int = 800, page_height: int = 800) -> None:
+    def __init__(self, sink_input: int, app: str, volume: int = 0, page_width: int = 800, page_height: int = 800) -> None:
         """
         Initializes the ColumnApp instance.
 
@@ -24,13 +26,20 @@ class ColumnApp(ft.Container):
         super().__init__()
         self._app: str = app
         self._volume: int = volume
+        self._sink_input: int = sink_input
         self._page_width: int = page_width
         self._page_height: int = page_height
+        self._sound_app: SoundLevel = SoundLevel(sink_input)
 
         # Create UI elements
+        self._style_property()
         self._create_app_text()
         self._create_slider()
         self._create_column()
+
+    def _style_property(self) -> None:
+        self.bgcolor = ft.colors.GREY
+        self.border_radius = 15
 
     def _create_app_text(self) -> None:
         """
@@ -89,7 +98,7 @@ class ColumnApp(ft.Container):
         Handler function for when the slider value changes.
         Prints the current value of the slider.
         """
-        print(f"value of slider: {int(self._volume_slider.value)}")
+        self._sound_app.set_volume(int(self._volume_slider.value))
 
     def update_layout(self, page_width: int, page_height: int) -> None:
         """
@@ -104,32 +113,3 @@ class ColumnApp(ft.Container):
         self._page_height: int = int(page_height)
         self._create_column()
         self.update()
-
-
-def main(page: ft.Page):
-    """
-    Main function to initialize and run the application.
-
-    Args:
-        page (ft.Page): The Flet page instance to add the ColumnApp to.
-    """
-    app = ColumnApp(app="firefox", volume=50, page_width=page.width, page_height=page.height)
-
-    def on_resized(e):
-        """
-        Event handler function for page resize events.
-        Updates the layout of the ColumnApp.
-
-        Args:
-            e: Event object (not used).
-        """
-        app.update_layout(page.width, page.height)
-
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.on_resized = on_resized
-    page.add(app)
-
-
-if __name__ == "__main__":
-    ft.app(target=main)
